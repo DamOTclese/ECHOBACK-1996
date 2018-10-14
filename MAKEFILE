@@ -1,0 +1,105 @@
+
+#########################################################################
+# This file creates the EB.EXE program.                                 #
+# Copyright (c) 1996 Fredric L. Rice                                    #
+#                                                                       #
+#########################################################################
+
+#########################################################################
+# The MODEL variable is used to describe                                #
+# the memory model to use.                                              #
+#                                                                       #
+#########################################################################
+
+MODEL = h                                                                
+
+#########################################################################
+# Compiler SWITCHES:                                                    #
+#                                                                       #
+#  -1      80186/286 Instructions                                       #
+#  -2      80286 Protected Mode Inst.                                   #
+#  -Ax     Disable extensions                                           #
+#  -B      Compile via assembly                                         #
+#  -C      Allow nested comments                                        #
+#  -Dxxx   Define macro                                                 #
+#  -Exxx   Alternate Assembler name                                     #
+#  -G      Generate for speed                   {selected}              #
+#  -Ixxx   Include files directory                                      #
+#  -K      Default char is unsigned             {selected}              #
+#  -Lxxx   Libraries directory                                          #
+#  -M      Generate link map                    {selected}              #
+#  -N      Check stack overflow                                         #
+#  -O      Optimize jumps                       {selected}              #
+#  -P      Force C++ compile                                            #
+#  -Qxxx   Memory usage control                                         #
+#  -S      Produce assembly output                                      #
+#  -Txxx   Set assembler option                                         #
+#  -Uxxx   Undefine macro                                               #
+#  -Vx     Virtual table control                                        #
+#  -X      Suppress autodep. output                                     #
+#  -Yx     Overlay control                                              #
+#  -Z      Optimize register usage              {selected}              #
+#  -a      Generate word alignment                                      #
+#  -b    * Treat enums as integers                                      #
+#  -c      Compile only                                                 #
+#  -d      Merge duplicate strings              {selected}              #
+#  -exxx   Executable file name                                         #
+#  -fxx    Floating point options                                       #
+#  -gN     Stop after N warnings                {selected}              #
+#  -iN     Max. identifier length                                       #
+#  -jN     Stop after N errors                  {selected}              #
+#  -k      Standard stack frame                                         #
+#  -lx     Set linker option                                            #
+#  -mx     Set Memory Model                     {selected}              #
+#  -nxxx   Output file directory                                        #
+#  -oxxx   Object file name                                             #
+#  -p      Pascal calls                                                 #
+#  -r    * Register variables                                           #
+#  -u    * Underscores on externs                                       #
+#  -v      Source level debugging                                       #
+#  -wxxx   Warning control                                              #
+#  -y      Produce line number info                                     #
+#  -zxxx   Set segment names                                            #
+#                                                                       #
+#########################################################################
+
+SWITCHES1 = -Ic:\tc\include -G -O -d -Z -K -g5 -j1 -M
+
+#########################################################################
+# Describe the files that are used to create the executable module.     #
+#                                                                       #
+#########################################################################
+
+EB.exe : EB.obj
+
+#########################################################################
+# Here is the command to execute if EB.exe needs to be linked.       #
+#                                                                       #
+# /m = map file with publics                       {selected}           #
+# /x = no map file at all                                               #
+# /i = initialize all segments                     {selected}           #
+# /l = include source line numbers                                      #
+# /s = detailed map of segments                    {selected}           #
+# /n = no default libraries                                             #
+# /d = warn if duplicate symbols in libraries                           #
+# /c = lower case significant in symbols                                #
+# /3 = enable 32-bit processing                                         #
+# /v = include full symbolic debug information                          #
+# /e = ignore Extended Dictionary                                       #
+# /t = create COM file                                                  #
+# /o = overlay switch                                                   #
+# /ye = expanded memory swapping                                        #
+# /yx = extended memory swapping                                        #
+#                                                                       #
+#########################################################################
+
+     tlink /m /s /i @EB.res
+
+#########################################################################
+# The following are the commands that create the object modules.        #
+#                                                                       #
+#########################################################################
+
+EB.obj : EB.c
+     tcc -c $(SWITCHES1) -m$(MODEL) EB.c
+
